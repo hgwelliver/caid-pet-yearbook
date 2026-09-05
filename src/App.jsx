@@ -1,179 +1,190 @@
-import { useState } from "react";
+import { forwardRef, useRef, useState } from "react";
+import HTMLFlipBook from "react-pageflip";
 import "./App.css";
 
+const Page = forwardRef(({ children, className = "" }, ref) => {
+  return (
+    <div className={`page ${className}`} ref={ref}>
+      {children}
+    </div>
+  );
+});
+
 function App() {
-  const [spread, setSpread] = useState(0);
+  const bookRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [flipDirection, setFlipDirection] = useState("");
+
+  const animateFlip = (direction, flip) => {
+    setFlipDirection("");
+    requestAnimationFrame(() => setFlipDirection(direction));
+    flip();
+  };
 
   const nextPage = () => {
-    if (spread < 2) {
-      setSpread(spread + 1);
-    }
+    animateFlip("flip-next", () => {
+    bookRef.current?.pageFlip().flipNext();
+    });
   };
 
   const previousPage = () => {
-    if (spread > 0) {
-      setSpread(spread - 1);
-    }
+    animateFlip("flip-previous", () => {
+      bookRef.current?.pageFlip().flipPrev();
+    });
   };
 
   return (
     <main className="app">
-
       <div className="yearbook">
-
         <h1 className="page-title">The Pets of CAID</h1>
 
         <div className="book-row">
-
           {/* LEFT ARROW */}
           <button
             className="nav-button"
             onClick={previousPage}
-            disabled={spread === 0}
+            disabled={currentPage === 0}
             aria-label="Previous page"
           >
             ←
           </button>
 
-          {/* BOOK */}
-          <div className="book">
+          {/* FLIP BOOK */}
+          <div className={`book ${flipDirection}`}>
+            <HTMLFlipBook
+              width={290}
+              height={435}
+              size="fixed"
+              minWidth={220}
+              maxWidth={320}
+              minHeight={330}
+              maxHeight={480}
+              showCover={true}
+              mobileScrollSupport={true}
+              usePortrait={false}
+              maxShadowOpacity={0.35}
+              flippingTime={900}
+              ref={bookRef}
+              onFlip={(e) => setCurrentPage(e.data)}
+              className="flip-book"
+            >
+              {/* FRONT COVER */}
+              <Page className="cover-page">
+                <img
+                  src="/book%20cover.png"
+                  alt="The Pets of CAID Yearbook Cover"
+                  className="cover-image"
+                />
+              </Page>
 
-            {/* COVER */}
-            {spread === 0 && (
-              <img
-                className="cover"
-                src="/book cover.png"
-                alt="CAID Pet Yearbook cover featuring a cat and dog in space"
-              />
-            )}
+              {/* PAGE 1 */}
+              <Page>
+                <div className="page-content">
+                  <div className="pet-photo">
+                    🐈
+                  </div>
 
-            {/* PAGES 1 + 2 */}
-            {spread === 1 && (
-              <div className="spread">
+                  <h2>Oat</h2>
 
-                <div className="page left-page">
-                  <div className="page-content">
-                    <span className="page-number">1</span>
+                  <p className="superlative">
+                    Most Likely to Knock Something Off the Counter
+                  </p>
 
-                    <div className="pet-photo">
-                      🐈
-                    </div>
-
-                    <h2>Oat</h2>
-
-                    <p className="superlative">
-                      Most Likely to Knock Something Off the Counter
+                  <div className="details">
+                    <p>
+                      <strong>Favorite activity</strong>
+                      Watching birds
                     </p>
 
-                    <div className="details">
-                      <p>
-                        <strong>Favorite activity</strong>
-                        Watching birds
-                      </p>
-
-                      <p>
-                        <strong>Favorite snack</strong>
-                        Chicken
-                      </p>
-
-                      <p>
-                        <strong>Quote</strong>
-                        “I meant to do that.”
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="page right-page">
-                  <div className="page-content">
-                    <span className="page-number">2</span>
-
-                    <div className="pet-photo">
-                      🐕
-                    </div>
-
-                    <h2>Pickles</h2>
-
-                    <p className="superlative">
-                      Best Hallway Zoomies
+                    <p>
+                      <strong>Favorite snack</strong>
+                      Chicken
                     </p>
 
-                    <div className="details">
-                      <p>
-                        <strong>Favorite activity</strong>
-                        Going to the park
-                      </p>
-
-                      <p>
-                        <strong>Favorite snack</strong>
-                        Cheese
-                      </p>
-
-                      <p>
-                        <strong>Quote</strong>
-                        “Is that for me?”
-                      </p>
-                    </div>
                   </div>
                 </div>
+              </Page>
 
-              </div>
-            )}
+              {/* PAGE 2 */}
+              <Page>
+                <div className="page-content">
+                  <div className="pet-photo">
+                    🐕
+                  </div>
 
-            {/* PAGES 3 + 4 */}
-            {spread === 2 && (
-              <div className="spread">
+                  <h2>Pickles</h2>
 
-                <div className="page left-page">
-                  <div className="page-content">
-                    <span className="page-number">3</span>
+                  <p className="superlative">
+                    Best Hallway Zoomies
+                  </p>
 
-                    <div className="pet-photo">
-                      🐇
-                    </div>
-
-                    <h2>Mochi</h2>
-
-                    <p className="superlative">
-                      Best Dressed
+                  <div className="details">
+                    <p>
+                      <strong>Favorite activity</strong>
+                      Going to the park
                     </p>
-                  </div>
-                </div>
 
-                <div className="page right-page">
-                  <div className="page-content">
-                    <span className="page-number">4</span>
-
-                    <div className="pet-photo">
-                      🐈‍⬛
-                    </div>
-
-                    <h2>Luna</h2>
-
-                    <p className="superlative">
-                      Most Mysterious
+                    <p>
+                      <strong>Favorite snack</strong>
+                      Cheese
                     </p>
+
                   </div>
                 </div>
+              </Page>
 
-              </div>
-            )}
+              {/* PAGE 3 */}
+              <Page>
+                <div className="page-content">
+                  <div className="pet-photo">
+                    🐇
+                  </div>
 
+                  <h2>Mochi</h2>
+
+                  <p className="superlative">
+                    Best Dressed
+                  </p>
+                </div>
+              </Page>
+
+              {/* PAGE 4 */}
+              <Page>
+                <div className="page-content">
+                  <div className="pet-photo">
+                    🐈‍⬛
+                  </div>
+
+                  <h2>Luna</h2>
+
+                  <p className="superlative">
+                    Most Mysterious
+                  </p>
+                </div>
+              </Page>
+
+              {/* BACK COVER */}
+              <Page className="back-cover">
+                <img
+                  src="/back%20cover.png"
+                  alt="The Pets of CAID Yearbook Back Cover"
+                  className="cover-image"
+                />
+              </Page>
+            </HTMLFlipBook>
           </div>
 
           {/* RIGHT ARROW */}
           <button
             className="nav-button"
             onClick={nextPage}
-            disabled={spread === 2}
+            disabled={currentPage >= 4}
             aria-label="Next page"
           >
             →
           </button>
-
         </div>
       </div>
-
     </main>
   );
 }
