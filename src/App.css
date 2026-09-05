@@ -73,6 +73,10 @@
   justify-content: center;
 
   perspective: 2000px;
+
+  filter:
+    drop-shadow(0 0 10px rgba(24, 55, 150, 0.95))
+    drop-shadow(0 24px 34px rgba(0, 0, 0, 0.28));
 }
 
 
@@ -245,7 +249,8 @@
 
 .pet-photo {
   width: min(100%, 190px);
-  height: 210px;
+  height: 225px;
+  flex-shrink: 0;
 
   margin-bottom: 14px;
 
@@ -264,6 +269,15 @@
 }
 
 
+.pet-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+
 .page-content h2 {
   margin: 0;
 
@@ -271,12 +285,31 @@
 }
 
 
+.owner {
+  margin: 4px 0 0;
+
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 400;
+
+  color: #292722;
+}
+
+
+.owner strong {
+  margin-right: 4px;
+
+  font: inherit;
+  color: inherit;
+}
+
+
 .superlative {
   max-width: 100%;
 
-  margin: 6px 0 14px;
+  margin: 4px 0 10px;
 
-  font-size: 16px;
+  font-size: 13px;
 
   font-style: italic;
 
@@ -287,6 +320,10 @@
 .details {
   width: 100%;
   min-width: 0;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
 
   padding-top: 10px;
 
@@ -299,7 +336,8 @@
 
 
 .details p {
-  margin: 8px 0;
+  min-width: 0;
+  margin: 0;
   overflow-wrap: anywhere;
 }
 
@@ -393,7 +431,7 @@
 
   .pet-photo {
     width: min(100%, 210px);
-    height: 230px;
+    height: 245px;
 
     font-size: 80px;
   }
@@ -428,6 +466,6 @@
 
   .pet-photo {
     width: min(100%, 180px);
-    height: 190px;
+    height: 205px;
   }
 }

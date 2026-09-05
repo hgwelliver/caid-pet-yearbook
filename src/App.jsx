@@ -36,8 +36,6 @@ function App() {
   return (
     <main className="app">
       <div className="yearbook">
-        <h1 className="page-title">The Pets of CAID</h1>
-
         <div className="book-row">
           {/* LEFT ARROW */}
           <button
@@ -81,24 +79,33 @@ function App() {
               <Page>
                 <div className="page-content">
                   <div className="pet-photo">
-                    🐈
+                    <img
+                      src="/Oat.PNG"
+                      alt="Oat"
+                      className="pet-image"
+                    />
                   </div>
 
                   <h2>Oat</h2>
 
+                  <p className="owner">
+                    <strong>Human:</strong>
+                    Haley Welliver
+                  </p>
+
                   <p className="superlative">
-                    Most Likely to Knock Something Off the Counter
+                    Most likely to be successful in total world domination
                   </p>
 
                   <div className="details">
                     <p>
                       <strong>Favorite activity</strong>
-                      Watching birds
+                      Going on walks
                     </p>
 
                     <p>
                       <strong>Favorite snack</strong>
-                      Chicken
+                      Squeeze treats
                     </p>
 
                   </div>
@@ -113,6 +120,11 @@ function App() {
                   </div>
 
                   <h2>Pickles</h2>
+
+                  <p className="owner">
+                    <strong>Human:</strong>
+                    Jordan
+                  </p>
 
                   <p className="superlative">
                     Best Hallway Zoomies
@@ -142,9 +154,27 @@ function App() {
 
                   <h2>Mochi</h2>
 
+                  <p className="owner">
+                    <strong>Human:</strong>
+                    Casey
+                  </p>
+
                   <p className="superlative">
                     Best Dressed
                   </p>
+
+                  <div className="details">
+                    <p>
+                      <strong>Favorite activity</strong>
+                      Hopping through the garden
+                    </p>
+
+                    <p>
+                      <strong>Favorite snack</strong>
+                      Carrots
+                    </p>
+
+                  </div>
                 </div>
               </Page>
 
@@ -157,9 +187,91 @@ function App() {
 
                   <h2>Luna</h2>
 
+                  <p className="owner">
+                    <strong>Human:</strong>
+                    Taylor
+                  </p>
+
                   <p className="superlative">
                     Most Mysterious
                   </p>
+
+                  <div className="details">
+                    <p>
+                      <strong>Favorite activity</strong>
+                      Watching from high places
+                    </p>
+
+                    <p>
+                      <strong>Favorite snack</strong>
+                      Salmon
+                    </p>
+
+                  </div>
+                </div>
+              </Page>
+
+              {/* PAGE 5 */}
+              <Page>
+                <div className="page-content">
+                  <div className="pet-photo">
+                    🐶
+                  </div>
+
+                  <h2>Biscuit</h2>
+
+                  <p className="owner">
+                    <strong>Human:</strong>
+                    Morgan
+                  </p>
+
+                  <p className="superlative">
+                    Most Enthusiastic Greeter
+                  </p>
+
+                  <div className="details">
+                    <p>
+                      <strong>Favorite activity</strong>
+                      Chasing tennis balls
+                    </p>
+
+                    <p>
+                      <strong>Favorite snack</strong>
+                      Peanut butter
+                    </p>
+                  </div>
+                </div>
+              </Page>
+
+              {/* PAGE 6 */}
+              <Page>
+                <div className="page-content">
+                  <div className="pet-photo">
+                    🐹
+                  </div>
+
+                  <h2>Clover</h2>
+
+                  <p className="owner">
+                    <strong>Human:</strong>
+                    Riley
+                  </p>
+
+                  <p className="superlative">
+                    Most Likely to Find a Hidden Snack
+                  </p>
+
+                  <div className="details">
+                    <p>
+                      <strong>Favorite activity</strong>
+                      Exploring new tunnels
+                    </p>
+
+                    <p>
+                      <strong>Favorite snack</strong>
+                      Apple slices
+                    </p>
+                  </div>
                 </div>
               </Page>
 
@@ -178,7 +290,7 @@ function App() {
           <button
             className="nav-button"
             onClick={nextPage}
-            disabled={currentPage >= 4}
+            disabled={currentPage >= 6}
             aria-label="Next page"
           >
             →
