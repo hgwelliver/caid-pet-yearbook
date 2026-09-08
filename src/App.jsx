@@ -81,6 +81,18 @@ function App() {
     });
   };
 
+  const flipToFrontCover = () => {
+    animateFlip("flip-previous", () => {
+      bookRef.current?.pageFlip().turnToPage(0);
+    });
+  };
+
+  const flipToBackCover = () => {
+    animateFlip("flip-next", () => {
+      bookRef.current?.pageFlip().turnToPage(lastPage);
+    });
+  };
+
   const closeComment = () => {
     setIsCommentOpen(false);
     setIsColorPickerOpen(false);
@@ -478,13 +490,35 @@ function App() {
           </div>
         </div>
 
-        <button
-          className="comment-button"
-          type="button"
-          onClick={() => setIsCommentOpen(true)}
-        >
-          Add a comment
-        </button>
+        <div className="comment-controls">
+          <button
+            className="cover-jump-button"
+            type="button"
+            onClick={flipToFrontCover}
+            title="Flip to front cover"
+            aria-label="Flip to front cover"
+          >
+            &lt;&lt;
+          </button>
+
+          <button
+            className="comment-button"
+            type="button"
+            onClick={() => setIsCommentOpen(true)}
+          >
+            Add a comment
+          </button>
+
+          <button
+            className="cover-jump-button"
+            type="button"
+            onClick={flipToBackCover}
+            title="Flip to back cover"
+            aria-label="Flip to back cover"
+          >
+            &gt;&gt;
+          </button>
+        </div>
 
       </div>
 

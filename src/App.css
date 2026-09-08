@@ -531,8 +531,17 @@
    COMMENTS
 ========================= */
 
-.comment-button {
+.comment-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   margin-top: 18px;
+}
+
+
+.comment-button,
+.cover-jump-button {
   padding: 10px 18px;
 
   border: 1px solid #aaa49b;
@@ -551,7 +560,15 @@
 }
 
 
+.cover-jump-button {
+  padding: 10px 12px;
+
+  font-size: 15px;
+}
+
+
 .comment-button:hover,
+.cover-jump-button:hover,
 .comment-submit:hover {
   background: #f8f3e8;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
@@ -799,6 +816,7 @@
 .comment-select:focus,
 .comment-close:focus-visible,
 .comment-button:focus-visible,
+.cover-jump-button:focus-visible,
 .comment-cancel:focus-visible,
 .comment-submit:focus-visible {
   outline: 2px solid #5f7892;
