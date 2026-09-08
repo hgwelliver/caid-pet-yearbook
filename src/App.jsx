@@ -2,9 +2,6 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
 import "./App.css";
 
-const commentsStorageKey = "pet-yearbook-comments-cleared";
-const previousCommentsStorageKey = "pet-yearbook-comments";
-
 const Page = forwardRef(({ children, className = "" }, ref) => {
   return (
     <div className={`page ${className}`} ref={ref}>
@@ -42,26 +39,21 @@ function App() {
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [commentPage, setCommentPage] = useState("1");
   const [commentToDelete, setCommentToDelete] = useState(null);
-  const [comments, setComments] = useState(() => {
-    if (typeof window === "undefined") {
-      return [];
-    }
-
-    try {
-      window.localStorage.removeItem(previousCommentsStorageKey);
-      const savedComments = window.localStorage.getItem(commentsStorageKey);
-      const parsedComments = savedComments ? JSON.parse(savedComments) : [];
-
-      return Array.isArray(parsedComments) ? parsedComments : [];
-    } catch {
-      return [];
-    }
-  });
+  const [comments, setComments] = useState([]);
   const lastPage = 11;
 
   useEffect(() => {
-    window.localStorage.setItem(commentsStorageKey, JSON.stringify(comments));
-  }, [comments]);
+    fetch("/api/comments")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unable to load comments");
+        }
+
+        return response.json();
+      })
+      .then(setComments)
+      .catch((error) => console.error(error));
+  }, []);
 
   const animateFlip = (direction, flip) => {
     setFlipDirection("");
@@ -99,7 +91,7 @@ function App() {
     setCommentText("");
   };
 
-  const addComment = (event) => {
+  const addComment = async (event) => {
     event.preventDefault();
     const trimmedComment = commentText.trim();
 
@@ -107,23 +99,47 @@ function App() {
       return;
     }
 
-    setComments((existingComments) => [
-      ...existingComments,
-      {
-        text: trimmedComment,
-        font: commentFont,
-        color: commentColor,
-        page: Number(commentPage),
-      },
-    ]);
-    closeComment();
+    try {
+      const response = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: trimmedComment,
+          font: commentFont,
+          color: commentColor,
+          page: Number(commentPage),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to save comment");
+      }
+
+      const savedComment = await response.json();
+      setComments((existingComments) => [...existingComments, savedComment]);
+      closeComment();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const deleteComment = (commentToDelete) => {
-    setComments((existingComments) =>
-      existingComments.filter((comment) => comment !== commentToDelete),
-    );
-    setCommentToDelete(null);
+  const deleteComment = async (commentToDelete) => {
+    try {
+      const response = await fetch(`/api/comments/${commentToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to delete comment");
+      }
+
+      setComments((existingComments) =>
+        existingComments.filter((comment) => comment.id !== commentToDelete.id),
+      );
+      setCommentToDelete(null);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const renderPageComments = (pageIndex) => {
@@ -136,7 +152,7 @@ function App() {
     return (
       <div className="page-comments" aria-label="Comments">
         {pageComments.map((comment, index) => (
-          <div className="page-comment-row" key={`${comment.text}-${index}`}>
+          <div className="page-comment-row" key={comment.id || `${comment.text}-${index}`}>
             <p
               className="page-comment"
               style={{
